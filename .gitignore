@@ -1,4 +1,4 @@
-Makefile
+build/
 **/*.acn
 **/*.acr
 **/*.alg

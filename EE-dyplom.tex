@@ -27,16 +27,16 @@
 % Konfiguracja - do personalizacji
 % Configuration - to be personalized
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\instytut{Instytut Badawczy Zjednoczonych Przedsiębiorstw Elektronowych}
-\kierunek{Mechaneurystyka}
-\specjalnosc{Rzeczowidztwo}
-\title{Telechroniczna Optymalizacja Historii~Powszechnej~Hyperputerem}
-\engtitle{Telechronic Optimization of~Universal~History Using~Hyperputer}
-\album{210912}
-\author{inż. Ijon Tichy}
-\promotor{prof. dr hab. inż. Astral Sternu Tarantoga}
-\date{2077}
-\longdate{2077-07-27}
+\instytut{}
+\kierunek{ Informatyka Stosowana}
+\specjalnosc{Inżynieria Oprogramowania}
+\title{Metody komunikacji między-wątkowej w systemach czasu rzeczywistego}
+\engtitle{Methods of inter-thread communication in real time operating systems}
+\album{311394}
+\author{Artur Romaniuk}
+\promotor{}
+\date{2023}
+\longdate{2023-03-19}
 
 %\grantlicense{TRUE} % [TRUE|FALSE]
 
@@ -45,17 +45,15 @@
 % In case of thesis in English swap the order - English version goes first.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \streszczeniepracy{
-To jest streszczenie. To jest trochę za krótkie, jako że powinno zająć całą stronę.
-
-\lipsum[1-4]
+Celem autora w niniejszej pracy było przedstawienie dostępnych sposobów komunikacji miedzy-wątkowej w systemach operacyjnych czasu rzeczywistego.
+W tym celu autor wykorzystał system operacyjny FreeRTOS, na którego to przykładzie zostały przedstawione koncepty synchronizacji zadań oraz przekazywania danych.
 } % koniec streszczenia
 
-\slowakluczowe{A, B, C}
+\slowakluczowe{Systemy operacyjne czasu rzeczywistego, RTOS, FreeRTOS, synchronizacja, wielowątkowość}
 
 \thesisabstract{
 This is abstract. This one is a little too short as it should occupy the whole page.
 
-\lipsum[1-4]
 } % end of abstract
 
 \thesiskeywords{X, Y, Z}
@@ -65,29 +63,28 @@ This is abstract. This one is a little too short as it should occupy the whole p
 % Here is the beginning of the document
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{document}
-    % Strony nagłówkowe
-    % Headers
-    \frontpages
+% Strony nagłówkowe
+% Headers
+\frontpages
 
-    % Właściwa treść jest w pliku tekst/main.tex
-    % Real contents is in tekst/main.tex
-    \input{tekst/main}
+% Właściwa treść jest w pliku tekst/main.tex
+% Real contents is in tekst/main.tex
+\input{tekst/main}
 
-    % Bibliografia - musi być
-    % Bibliography - must exist
-    \bibliografia
+% Bibliografia - musi być
+% Bibliography - must exist
+\bibliografia
 
-    % Strony końcowe - można zakomentować, jeśli zbędne
-    % Additional pages - comment out if not needed
-    
-    % Wykaz symboli i skrótów - patrz opis w tekście przykładowym
-    \acronymslist
-    % Spis rysunków
-    \listoffigures
-    % Spis tabel
-    \listoftables
-    % Załączniki (plik appendices.tex)
-    \easyappendices
+% Strony końcowe - można zakomentować, jeśli zbędne
+% Additional pages - comment out if not needed
+
+% Wykaz symboli i skrótów - patrz opis w tekście przykładowym
+\acronymslist
+% Spis rysunków
+\listoffigures
+% Spis tabel
+\listoftables
+% Załączniki (plik appendices.tex)
+\easyappendices
 \end{document}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-

@@ -76,7 +76,7 @@
 \setglossarysection{section}
 \makeglossaries
 \loadglsentries{glossary}
-\ifnum\strcmp{\locallang}{PL} = 0 
+\ifnum\strcmp{\locallang}{PL} = 0
     \newcommand{\acronymstitle}{Wykaz skrótów i symboli}
 \else
     \newcommand{\acronymstitle}{List of Abbreviations and Symbols}
@@ -92,26 +92,26 @@
 % Lista krojów typowo dostępnych w LaTeX:
 % https://tug.org/FontCatalogue/
 % -------------------------------------------------------------------
-\RequirePackage{amsfonts}
+% \RequirePackage{amsfonts}
 \RequirePackage{amsmath}
 \RequirePackage{amssymb}
 \RequirePackage{amsthm}
 \RequirePackage{esint}
 %\RequirePackage[version=4]{mhchem}
-\ifXeTeX
-    \RequirePackage{mathspec} % wczytuje również fontspec
-    \setmainfont{Latin Modern Roman}
-    \setromanfont{Latin Modern Roman}
-    \setsansfont{Latin Modern Sans}
-    \setmonofont{Latin Modern Mono}
-    \setmathrm{Latin Modern Math}
-    \setmathfont(Digits,Latin)[Scale=MatchLowercase]{Latin Modern Math}
-\else
-    \RequirePackage{lmodern}
-    \renewcommand*\familydefault{\sfdefault}
-    \RequirePackage[T1]{fontenc}
-\fi
-\renewcommand{\familydefault}{\sfdefault}
+% \ifXeTeX
+%     \RequirePackage{mathspec} % wczytuje również fontspec
+%     \setmainfont{Latin Modern Roman}
+%     \setromanfont{Latin Modern Roman}
+%     \setsansfont{Latin Modern Sans}
+%     \setmonofont{Latin Modern Mono}
+%     \setmathrm{Latin Modern Math}
+%     \setmathfont(Digits,Latin)[Scale=MatchLowercase]{Latin Modern Math}
+% \else
+%     \RequirePackage{lmodern}
+%     \renewcommand*\familydefault{\sfdefault}
+%     \RequirePackage[T1]{fontenc}
+% \fi
+% \renewcommand{\familydefault}{\sfdefault}
 
 % -------------------------------------------------------------------
 % Podstawowa konfiguracja XeLaTeX
@@ -126,7 +126,7 @@
 % -------------------------------------------------------------------
 \ifXeTeX
     \RequirePackage{polyglossia}
-    \ifnum\strcmp{\locallang}{PL} = 0 
+    \ifnum\strcmp{\locallang}{PL} = 0
         \setdefaultlanguage{polish}
     \else
         \setdefaultlanguage{english}
@@ -138,7 +138,7 @@
     %\selectlanguage{polish}
 \else
     \RequirePackage[MeX]{polski}
-    \ifnum\strcmp{\locallang}{PL} = 0 
+    \ifnum\strcmp{\locallang}{PL} = 0
         \RequirePackage[latin,english,polish]{babel}
         \selectlanguage{polish}
     \else
@@ -245,10 +245,10 @@
 % ALBO styl harwardzki
 % -------------------------------------------------------------------
 \RequirePackage[backend=biber,
-        style=ieee,     % styl numeryczny IEEE prawie jak PN
-        sorting=nyt,    % sortowanie spisu po nazwiskach
-        citestyle=numeric-comp % kompaktowe odnośniki numeryczne typu [21-23]
-    ]{biblatex}
+    style=ieee,     % styl numeryczny IEEE prawie jak PN
+    sorting=nyt,    % sortowanie spisu po nazwiskach
+    citestyle=numeric-comp % kompaktowe odnośniki numeryczne typu [21-23]
+]{biblatex}
 \addbibresource{EE-dyplom.bib}
 \DeclareNameAlias{default}{family-given} % nazwisko na początku
 \newcommand{\bibliografia}{
@@ -297,8 +297,8 @@
 %        {caption}
 % Alternatywnie: 10 pt gdy główny to 11 pt i 11 pt gdy główny to 12 pt
 \RequirePackage[format=plain, labelfont=bf, labelsep=period,
-            font=small, justification=justified]
-        {caption}
+    font=small, justification=justified]
+{caption}
 \RequirePackage{subcaption}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -336,16 +336,16 @@
 % -------------------------------------------------------------------
 \RequirePackage{hyperref}
 \hypersetup{ % Na bazie https://en.wikibooks.org/wiki/LaTeX/Hyperlinks
-%    bookmarks=true,         % show bookmarks bar? FIXME
+    %    bookmarks=true,         % show bookmarks bar? FIXME
     unicode=true,           % non-Latin characters in Acrobat’s bookmarks
     pdftoolbar=true,        % show Acrobat’s toolbar?
     pdfmenubar=true,        % show Acrobat’s menu?
     pdffitwindow=false,     % window fit to page when opened
     pdfstartview={FitH},    % fits the width of the page to the window
-%    pdfsubject={}, % subject of the document
-%    pdfkeywords={}, % list of keywords
+    %    pdfsubject={}, % subject of the document
+    %    pdfkeywords={}, % list of keywords
     linktoc=all,            % defines which part of an entry in the table 
-                            %of contents is made into a link (none,section,page,all)
+    %of contents is made into a link (none,section,page,all)
     pdfnewwindow=true,      % links in new PDF window
     colorlinks=true,        % false: boxed links; true: colored links
     linkcolor=EEBlueDark,   % color of internal links (change box color with linkbordercolor)
@@ -459,7 +459,7 @@
 % -------------------------------------------------------------------
 \RequirePackage{etoolbox}
 %\RequirePackage[titletoc]{appendix}
-\ifnum\strcmp{\locallang}{PL} = 0 
+\ifnum\strcmp{\locallang}{PL} = 0
     \newcommand{\appendiceslisttitle}{Spis załączników}
     \newcommand{\appendixprefix}{Załącznik}
 \else
@@ -496,7 +496,7 @@
 \newlength\docparskip
 \setlength{\docparskip}{\parskip}
 \setlist[itemize,1]{nosep,
-        label=$\bullet$,    % ustawiony krój ma kwadratowe kropki
+    label=$\bullet$,    % ustawiony krój ma kwadratowe kropki
 }
 \setlist[itemize,2]{nosep,label=--}
 \setlist[itemize,3]{nosep,label=-}
@@ -602,11 +602,12 @@
 
     \thispagestyle{empty}
     \begin{center}
-    \includegraphics[width=\textwidth]{\pwheader}
+        \includegraphics[width=\textwidth]{\pwheader}
         \vskip 3em
         \@instytut
         \vskip 3em
-        \includegraphics[width=\linewidth]{\frontpageheader}
+        % \includegraphics[width=\linewidth]{\frontpageheader}
+        \Huge{Praca Zaliczeniowa}         \normalsize
         \vskip 1em
         \kieruneklocal \@kierunek
         \vskip .5em
@@ -618,7 +619,7 @@
         \normalsize
         \albumlocal \@album
         \vskip 2em
-        \promotorlocal\\\@promotor
+        % \promotorlocal\\\@promotor
         \vfill
         \citylocal \@date
     \end{center}
@@ -646,11 +647,11 @@
     \thispagestyle{empty}
     \begin{center}
         \textbf{\large\@title}
-        
+
         \textbf{Streszczenie}
     \end{center}
     \@streszczeniepracy
-    
+
     \vskip 2em
     \noindent\textbf{Słowa kluczowe: }
     \@slowakluczowe
@@ -663,11 +664,11 @@
     \thispagestyle{empty}
     \begin{center}
         \textbf{\large\@engtitle}
-        
+
         \textbf{Abstract}
     \end{center}
     \@thesisabstract
-    
+
     \vskip 2em
     \noindent\textbf{Keywords: }
     \@thesiskeywords
@@ -700,7 +701,7 @@
             \node[anchor=north west, inner sep=0pt] at(-0.8, -4.8) {\@kierunek};
             \node[anchor=north east, inner sep=0pt] at(13.8, -14.6) {\@author};
         \end{tikzpicture}
-	\clearpage
+        \clearpage
     \else % wersja angielska
         \begin{tikzpicture}[remember picture, overlay]
             \node [anchor=north west, inner sep=0pt] at (current page.north west)
@@ -711,8 +712,8 @@
             \node[anchor=north west, inner sep=0pt] at(-0.8, -5.2) {\@kierunek};
             \node[anchor=north east, inner sep=0pt] at(13.8, -19.6) {\@author};
         \end{tikzpicture}
-	\clearpage
-    \fi    
+        \clearpage
+    \fi
     \cleardoublepage
 }
 
@@ -729,24 +730,24 @@
             \node[anchor=north west, inner sep=0pt] at(-1.2, -2.95) {\@album};
             \node[anchor=north west, inner sep=0pt] at(-1.2, -3.75) {\@kierunek};
             \node[anchor=north east, inner sep=0pt] at(15.5, -13.3) {\@author};
-		\node[anchor=south west, inner sep=0pt] at(9.1, -8.85) {\resizebox*{7cm}{1em}{\@title}};
+            \node[anchor=south west, inner sep=0pt] at(9.1, -8.85) {\resizebox*{7cm}{1em}{\@title}};
         \end{tikzpicture}
-	% przekreślenia w wersji polskiej
-	% skreślenie "współautora" - TODO: prace wieloautorskie
-	\begin{tikzpicture}[remember picture, overlay]
-		\draw[thick] (3.1,-8.8) -- (4.7,-8.8);
-	\end{tikzpicture}
-	% skreślenia nieudzielenia licencji
-	\ifnum\strcmp{\@grantlicense}{TRUE} = 0
-	\begin{tikzpicture}[remember picture, overlay]
-		\draw[thick] (-.2,-9.25) -- (1.8,-9.25);
-	\end{tikzpicture}
-	\else % skreślenia udzielenia licencji XD
-	\begin{tikzpicture}[remember picture, overlay]
-		\draw[thick] (-1.7,-9.25) -- (-.4,-9.25);
-	\end{tikzpicture}
-	\fi
-	\clearpage
+        % przekreślenia w wersji polskiej
+        % skreślenie "współautora" - TODO: prace wieloautorskie
+        \begin{tikzpicture}[remember picture, overlay]
+            \draw[thick] (3.1,-8.8) -- (4.7,-8.8);
+        \end{tikzpicture}
+        % skreślenia nieudzielenia licencji
+        \ifnum\strcmp{\@grantlicense}{TRUE} = 0
+            \begin{tikzpicture}[remember picture, overlay]
+                \draw[thick] (-.2,-9.25) -- (1.8,-9.25);
+            \end{tikzpicture}
+        \else % skreślenia udzielenia licencji XD
+            \begin{tikzpicture}[remember picture, overlay]
+                \draw[thick] (-1.7,-9.25) -- (-.4,-9.25);
+            \end{tikzpicture}
+        \fi
+        \clearpage
     \else % wersja angielska
         % podstawowe dane w wersji angielskiej
         \begin{tikzpicture}[remember picture, overlay]
@@ -757,28 +758,28 @@
             \node[anchor=north west, inner sep=0pt] at(-0.8, -4.21) {\@album};
             \node[anchor=north west, inner sep=0pt] at(-0.8, -5.45) {\@kierunek};
             \node[anchor=north east, inner sep=0pt] at(14.9, -19.5) {\@author};
-		\node[anchor=south west, inner sep=0pt] at(9.4, -11.7) {\resizebox*{7cm}{1em}{\@title}};
-		\node[anchor=south west, inner sep=0pt] at(10.2, -13.95) {\resizebox*{1.5cm}{1em}{\@engtitle}};
+            \node[anchor=south west, inner sep=0pt] at(9.4, -11.7) {\resizebox*{7cm}{1em}{\@title}};
+            \node[anchor=south west, inner sep=0pt] at(10.2, -13.95) {\resizebox*{1.5cm}{1em}{\@engtitle}};
         \end{tikzpicture}
-	% przekreślenia w wersji angielskiej
-	% skreślenie "współautora" - TODO: prace wieloautorskie
-	\begin{tikzpicture}[remember picture, overlay]
-		\draw[thick] (3.5,-11.6) -- (5.3,-11.6);
-		\draw[thick] (3.9,-13.8) -- (5.4,-13.8);
-	\end{tikzpicture}
-	% skreślenia nieudzielenia licencji
-	\ifnum\strcmp{\@grantlicense}{TRUE} = 0
-	\begin{tikzpicture}[remember picture, overlay]
-		\draw[thick] (.2,-12.05) -- (2.6,-12.05);
-		\draw[thick] (12.8,-13.8) -- (14.6,-13.8);
-	\end{tikzpicture}
-	\else % skreślenia udzielenia licencji XD
-	\begin{tikzpicture}[remember picture, overlay]
-		\draw[thick] (-1.3,-12.05) -- (.1,-12.05);
-		\draw[thick] (11.9,-13.8) -- (12.7,-13.8);
-	\end{tikzpicture}
-	\fi
-	\clearpage
+        % przekreślenia w wersji angielskiej
+        % skreślenie "współautora" - TODO: prace wieloautorskie
+        \begin{tikzpicture}[remember picture, overlay]
+            \draw[thick] (3.5,-11.6) -- (5.3,-11.6);
+            \draw[thick] (3.9,-13.8) -- (5.4,-13.8);
+        \end{tikzpicture}
+        % skreślenia nieudzielenia licencji
+        \ifnum\strcmp{\@grantlicense}{TRUE} = 0
+            \begin{tikzpicture}[remember picture, overlay]
+                \draw[thick] (.2,-12.05) -- (2.6,-12.05);
+                \draw[thick] (12.8,-13.8) -- (14.6,-13.8);
+            \end{tikzpicture}
+        \else % skreślenia udzielenia licencji XD
+            \begin{tikzpicture}[remember picture, overlay]
+                \draw[thick] (-1.3,-12.05) -- (.1,-12.05);
+                \draw[thick] (11.9,-13.8) -- (12.7,-13.8);
+            \end{tikzpicture}
+        \fi
+        \clearpage
     \fi % koniec wersji angielskiej
     \cleardoublepage
 }
@@ -786,19 +787,19 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Jedno polecenie - kombajn stron początkowych
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\AtBeginDocument{\addtocontents{toc}{\protect\thispagestyle{empty}}} 
+\AtBeginDocument{\addtocontents{toc}{\protect\thispagestyle{empty}}}
 \newcommand{\frontpages}{
     \counterwithout{lstlisting}{chapter} % hack niestety
     \pagestyle{empty}
     \maketitle
     \abstractpages
-% Zgodnie z Zarządzeniem JM Rektora 3/2022, oświadczenia o autorstwie i
-% opcjonalne oświadczenie o udzieleniu licencji składane są w systemie USOS
-% APD.
-% Zgodnie z Zarządzeniem JM Rektora 4/2022 załącznik 1, układ pracy nie obejmuje
-% oświadczenia o autorstwie i udzielenia licencji BG PW.
-%    \authorship
-%    \licensedthesis
+    % Zgodnie z Zarządzeniem JM Rektora 3/2022, oświadczenia o autorstwie i
+    % opcjonalne oświadczenie o udzieleniu licencji składane są w systemie USOS
+    % APD.
+    % Zgodnie z Zarządzeniem JM Rektora 4/2022 załącznik 1, układ pracy nie obejmuje
+    % oświadczenia o autorstwie i udzielenia licencji BG PW.
+    %    \authorship
+    %    \licensedthesis
     \tableofcontents
     \cleardoublepage
     \pagestyle{headings}
@@ -808,7 +809,7 @@
 % Lista skrótów i symboli
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newcommand{\acronymslist}{
-%    \cleardoublepage
+    %    \cleardoublepage
     \chapter*{\acronymstitle}
     \pagestyle{plain}
     \addcontentsline{toc}{chapter}{\acronymstitle}
