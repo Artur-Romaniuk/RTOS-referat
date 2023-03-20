@@ -1,0 +1,57 @@
+W celu dokładnego zrozumienia wszystkich szczegółów komunikacji międzywątkowej w \gls{rtos} (często nazywanych z ang. ),
+jak i problemów związanych z nimi, należy najpierw zaznajomić się z ogólnymi
+charakterystykami takich systemów.
+
+W tym rozdziale zostaną przedstawione podstawy działania \gls{rtos}
+oraz powiązane z nimi ograniczenia. W dalszej części rozdziału zostaną opisane podstawowe zasady
+programowania wielowątkowego, co pomoże zrozumieć jakie problemy można napotkać w trakcie
+pracy z skomplikowanymi systemami równoległymi.
+
+\section{Systemy Operacyjne Czasu Rzeczywistego}
+\Gls{rtos} znacząco różnią się od standardowych systemów operacyjnych. Są to specjalizowane systemy, które zapewniają wysoką niezawodność,
+determinizm i szybką odpowiedź na zdarzenia w czasie rzeczywistym.
+Są one stosowane w wielu dziedzinach, takich jak przemysł, medycyna, telekomunikacja, transport czy lotnictwo,
+gdzie czas reakcji systemu na zdarzenia jest kluczowy dla zapewnienia bezpieczeństwa i efektywności działań.
+
+W RTOS, czas jest podstawowym elementem funkcjonowania systemu. Systemy te muszą zagwarantować przetwarzanie zadań w ściśle określonych przedziałach czasowych,
+zwanych czasami odpowiedzi (ang. response time), oraz przestrzeganie terminów odpowiedzi (ang. deadline).
+W zależności od dziedziny zastosowania, RTOS może wymagać różnej dokładności czasowej i charakteryzować się różną tolerancją na naruszenia terminów odpowiedzi.
+W systemach sterowania przemysłowego czas odpowiedzi wynosi zazwyczaj kilka milisekund, w medycynie może to być kilka mikrosekund,
+a w lotnictwie zaledwie kilkadziesiąt mikrosekund. Często też właśnie specyfika aktualnego urządzenia dyktuje konsekwencje związane z niedotrzymaniem terminów.
+Ze względu na stosunek do terminów odpowiedzi dzielimy \gls{rtos} na trzy kategorie:
+\begin{itemize}
+    \item twarde - takie, dla których przekroczenie terminu odpowiedzi wiąże się z katastrofalnymi skutkami dla systemu
+    \item sztywne - takie, dla których przekroczenie terminu odpowiedzi oznacza unieważnienie odpowiedzi, jednak bez katastrofalnych skutków dla systemu
+    \item miękkie - takie, dla których przekroczenie terminu odpowiedzi oznacza pogorszenie jakości odpowiedzi, bez katastrofalnych skutków dla systemu.
+\end{itemize}
+
+Klasycznym przykładem twardego systemu czasu rzeczywistego jest \Gls{abs}.
+Jest to urządzenie, które musi się aktywować w ściśle określonym terminie, w celu skutecznego wspomagania kierowcy w trudnej sytuacji. Łatwo sobie wyobrazić,
+że przedwczesna lub spóźniona aktywacja takiego systemu może nieść ze sobą tragiczne konsekwencje.
+
+Kategoria sztywnych systemów, nie jest zawsze wydzielana, jednak pozwala na sprecyzowanie systemów pośrednich, dla których przestrzeganie terminów jest
+wyjątkowo istotne, lecz pojedyncze przypadki przepuszczenia terminu nie niosą ze sobą katastrofalnych skutków. Tutaj jako przykład takiego systemu można
+przedstawić czujnik kontu nachylenia w samolocie. Posiadanie aktualnych wskazań czujnika jest krytyczne dla działania systemu jak i bezpieczeństwa pasażerów,
+lecz przepuszczenie jednego pomiaru nie wiąże się od razu z natychmiastową katastrofą samolotu, ponieważ system jest w stanie przez pewien czas polegać
+na poprzednich wskazaniach, do momentu rozwiązania problemu.
+
+Najniższymi konsekwencjami cechują się miękkie systemy, ponieważ najczęściej przekroczenie terminów wiąże się jedynie z degradacją jakości systemu.
+Przykładem takiego systemu może być domowy termostat z elektronicznym wyświetlaczem. Gdyby doszło do zawieszenia się systemu na pewien czas,
+zadowolenie użytkownika najprawdopodobniej spadnie, jednak nie będzie to miało żadnych poważnych konsekwencji dla systemu.
+
+RTOS składa się z trzech głównych elementów: jądra systemu, usług systemowych oraz aplikacji użytkownika.
+Jądro systemu to główny komponent \gls{rtos}, który zapewnia podstawowe funkcjonalności, takie jak zarządzanie wątkami, planowanie, obsługa przerwań czy synchronizacja wątków.
+Usługi systemowe to zestaw funkcji, które mogą być wywoływane przez aplikacje użytkownika i które zapewniają dodatkowe funkcjonalności,
+takie jak zarządzanie wątkami, synchronizacja, czy obsługa systemu plików.
+Aplikacje użytkownika to programy, które wykorzystują funkcjonalności RTOS do realizacji swojego zadania.
+
+\subsection{Zalety stosowania RTOS}
+\gls{rtos} umożliwiają programistom łatwe tworzenie aplikacji, które są podzielone na wątki, bez stosowania tradycyjnych systemów operacyjnych.
+Jest to kluczowy punkt dla zastosowań, gdzie zasoby systemowe są znacznie ograniczone, tak jak np. w systemach wbudowanych.
+Alternatywą do \gls{rtos} jest najczęściej architektura \gls{super loop}.
+
+
+
+Wątki to jednostki wykonywania, które są wykonywane równolegle i niezależnie od siebie. RTOS zapewnia zarządzanie wątkami, planowanie ich wykonania oraz ich synchronizację w celu zapewnienia bezkonfliktowego dostępu do współdzielonych zasobów systemowych.
+
+Podsumowując, Systemy Operacyjne Czasu Rzeczywistego to specjalizowane systemy operacyjne, które zapewniają niezawodność, determinizm i szybką
