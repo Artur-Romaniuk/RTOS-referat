@@ -813,8 +813,9 @@
     \chapter*{\acronymstitle}
     \pagestyle{plain}
     \addcontentsline{toc}{chapter}{\acronymstitle}
-    \printglossary[type=\acronymtype,title={}]
-    \printglossary[type=symbols,title={}]
+    \printglossary[title={Słownik}]
+    \printglossary[type=\acronymtype,title={Lista akronimów}]
+    \printglossary[type=symbols,title={Lista symboli}]
     % Alternatywna lista symboli - do użycia tylko w Overleaf
     %\input{symbols}
 }   %

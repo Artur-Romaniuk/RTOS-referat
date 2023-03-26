@@ -1,7 +1,13 @@
 {
     "cSpell.words": [
+        "kątu",
+        "Livelock",
         "międzywątkową",
         "międzywątkowej",
-        "muteksy"
+        "muteksy",
+        "niedeterminizmu",
+        "niewykonywania",
+        "preemtion",
+        "startowany"
     ]
 }
