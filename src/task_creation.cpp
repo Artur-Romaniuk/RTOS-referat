@@ -1,8 +1,11 @@
+#include <FreeRTOS.h>
+#include <task.h>
+
 void task_function(void *parameters)
 {
     while (true)
     {
-        /* Task Super Loop*/
+        /*Super Loop*/
     }
 }
 
@@ -12,17 +15,17 @@ void main_function(void)
     size_t stack_size = 100;
     uint16_t task_priority = 10;
 
-    /* Task creation */
+    /* utworzenie watku */
     BaseType_t status = xTaskCreate(
-        task_function,  /* Function that implements the task. */
-        "Example task", /* Text name for the task. */
-        stack_size,     /* Stack size in words, not bytes. */
-        nullptr,        /* Parameter passed into the task. */
-        task_priority,  /* Priority at which the task is created. */
-        &task_handle);  /* Used to pass out the created task's handle. */
+        task_function,  /* Funkcja wykonywana przez watek. */
+        "Example task", /* Nazwa watku. */
+        stack_size,     /* Rozmiar stosu watku w slowach. */
+        nullptr,        /* Argument do przekazania watkowi. */
+        task_priority,  /* Priorytet watku. */
+        &task_handle);  /* Wskaznik na strukture watku. */
 
-    assert(status == pdPASS);
+    assert(status == pdPASS); /* Zakladamy, ze watek zostal utworzony poprawnie. */
 
-    /* Task deletion */
+    /* Usuniecie watku. */
     vTaskDelete(task_handle);
 }

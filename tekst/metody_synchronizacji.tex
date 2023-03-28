@@ -5,4 +5,94 @@ analizując fragmenty kodu korzystającego z systemu FreeRTOS.
 W tej części pracy zostaną omówione metody synchronizacji dostępu do zasobów współdzielonych, a mianowicie: semafory binarne, semafory zliczające
 oraz muteksy. Jako że są to prymitywy synchronizacyjne o bardzo zbliżonym działaniu, duża waga zostanie położona na różnice w ich zastosowaniach
 oraz dobrych praktykach dot. wyboru odpowiedniego prymitywu.
+
 \subsection{Semafor binarny}
+Semafor jest to rodzaj prymitywu synchronizacyjnego, który nazwą jak i działaniem nawiązuje do kolejowego semafora. W infrastrukturze kolejowej
+semafor służy do kontrolowania ruchu pociągów na określonych odcinkach torów. Tak więc analogicznie w kontekście programowania, jako semafor rozumiemy
+narzędzie służące do synchronizowania dostępów do ograniczonego zasobu. Semafor binarny posiada dwa stany logiczne: 1 - semafor jest ''otwarty'' oraz
+0 - semafor jest ''zamknięty''. Oznacza to kolejno, że chroniony zasób jest wolny lub zajęty.
+Zasadniczo semafor posiada dwie podstawowe operacje:
+\begin{itemize}
+    \item Weź (ang. Take) - operacja zmniejsza wartość semafora o 1 albo blokuje wątek, jeśli wartość semafora jest już równa 0.
+    \item Daj (ang. Give) - operacja zwiększa wartość semafora o 1, jeśli był równy 0, i budzi oczekujące wątki.
+\end{itemize}
+
+Konceptualnie semafory binarne służą do przekazywania sygnałów pomiędzy fragmentami programu, np. między wątkami lub przerwaniami.
+Korzystając z nich użytkownik powinien mieć przed oczami zachowanie kolejowego semafora, który w określonych warunkach otwiera się
+i puszcza pociąg na tor. Taka wizualizacja pozwala programiście na uniknięcie typowych błędów, wynikających z błędnego użytkowanie tej metody synchronizacji.
+W szczególności semafor binarny nie powinien być wykorzystywany w celu kontrolowania jednoczesnego dostępu do zasobu,
+tzn. semafor nie powinien być dawany i brany przez ten sam wątek. W kolejowym przykładzie oznaczałoby to sytuację kiedy to pociąg sam sygnalizowałby
+otwarcie i zamknięcie toru, a nie oczekiwał na zewnętrzny sygnał. Jest to o tyle niebezpieczne, ponieważ może prowadzić do zawiłych i trudnych
+do analizowania sytuacji, w których jest wiele wątków sterujących, które mogą jednocześnie dawać i brać semafory. Semafor binarny jako stosunkowo
+prosta metoda synchronizacji nie rozróżnia pomiędzy tym kto daje, a kto bierze zasób, co może prowadzić do nieoczywistych sytuacji, niezgodnych z wizją
+systemu. W takich celach warto przyjrzeć się innej metodzie przedstawionej w dalszej części rozdziału, tj. muteksie.
+
+\subsubsection{Przykład zastosowania}
+Oto krótki fragment kodu prezentujący zastosowanie semafora binarnego w systemie FreeRTOS.
+\lstinputlisting[language=C++,
+    caption=Przykład zastosowania semafora binarnego w FreeRTOS,
+    label={lst:semafor_binarny}]{semafor_binarny.cpp}
+W tym przykładzie semafor binarny jest wykorzystywany do synchronizacji dostępu do chronionego zasobu przez dwa wątki.
+Wartość początkowa semafora jest ustawiona na ''zajęty'', co oznacza, że żadne z zadań nie ma dostępu do zasobu na początku
+działania systemu. Sygnał semafora jest dawany przez zewnętrzne przerwanie, które wybudza zadanie oczekujące na semafor.
+Zadanie to uzyskuje dostęp do chronionego zasobu i wykonuje swoją pracę.
+
+\subsection{Semafor zliczający}
+W odróżnieniu od semafora binarnego, semafor zliczający posiada licznik przyjmujący wartości nieujemne, zamiast tylko zera lub jedynki
+jak to było w przypadku semafora binarnego.
+Oznacza to to, że architektura systemu korzystającego z semafora zliczającego może zakładać sytuację, kiedy to więcej niż jeden proces
+ma dostęp do zasobu w danym czasie. Możliwe zastosowania to różnego rodzaju infrastruktura sieciowa lub bazodanowa,
+która obsługuje pewną skończoną, z góry znaną, ilość jednoczesnych połączeń.
+
+Semafor zliczający posiada te same dwie operacje co semafor binarny, z tą różnicą, że operacja dawania, jest wykonywana do momentu osiągnięcia
+pewnej zadanej liczby N, oznaczającej maksymalną liczbę jednoczesnych dostępów do zasobu. Oczywistym jest fakt, że za pomocą tak przedstawionej
+definicji, możemy w łatwy sposób pokazać, że semafor binarny to nic innego jak semafor zliczający dla N równego 1. Jest to o tyle ważne spostrzeżenie,
+ponieważ większość systemów właśnie w taki sposób implementuje semafory binarne.
+
+Tak samo jak w przypadku semafora binarnego, semafor zliczający nie powinien być wykorzystywany w celu kontrolowania jednoczesnego dostępu do zasobu.
+Głównym przeznaczeniem semafora zliczającego jest kontrola dostępu do ograniczonego zasobu, który może być jednocześnie wykorzystywany przez wiele procesów.
+
+Oto przykładowy kod zastosowania semafora zliczającego w FreeRTOS:
+
+\lstinputlisting[language=C++,
+    caption=Przykład zastosowania semafora zliczającego w FreeRTOS,
+    label={lst:semafor_zliczający}]{semafor_zliczajacy.cpp}
+W powyższym przykładzie xSemaphoreCreateCounting tworzy semafor zliczający z wartością początkową 3.
+W funkcji criticalFunction przed wykonaniem kodu krytycznego wątek musi uzyskać dostęp do semafora, co oznacza,
+że musi być dostępnych co najmniej jedno zliczenie semafora. Po zakończeniu pracy zasób jest zwalniany poprzez wywołanie xSemaphoreGive.
+
+W ten sposób semafor zliczający pozwala na równoczesne wykonanie kodu krytycznego przez maksymalnie 3 wątki,
+jednocześnie umożliwiając wykonywanie innych czynności przez pozostałe wątki.
+
+\subsection{Muteks}
+Muteks to najprawdopodobniej najczęściej wykorzystywany prymityw synchronizacyjny. Jest to rodzaj semafora binarnego, który pozwala na ograniczenie
+ilości procesów, które mogą jednocześnie wykonywać krytyczną sekcję kodu. W szczególności muteks pozwala na ograniczenie dostępu do zasobu
+do jednego procesu w danym czasie. W momencie, gdy wątek chce uzyskać dostęp do zasobów, sprawdza, czy muteks jest wolny. Jeśli tak,
+to wątek blokuje muteks i uzyskuje dostęp do zasobów. Gdy wątek kończy pracę z zasobami, zwalnia muteks, dzięki czemu inny wątek może
+uzyskać dostęp do zasobów. Muteksy są więc bardzo pomocne w zapewnieniu bezpiecznego i chronionego dostępu do współdzielonych zasobów.
+
+W odróżnieniu od semafora binarnego, muteks nie pozwala na wywołanie operacji daj bez poprzedniego wywołania operacji weź.
+Oznacza, to że muteks przechowuje informację o aktualnym posiadaczu, co w zależności od implementacji może wiązać się też z
+dziedziczeniem priorytetów od aktualnego posiadacza. Muteks jest często preferowany w porównaniu do semafora binarnego,
+ponieważ ma kilka zalet w kontroli dostępu do zasobów:
+\begin{itemize}
+    \item Bezpieczeństw - muteks jest bardziej bezpiecznym rozwiązaniem niż semafor binarny, ponieważ tylko jeden wątek
+          może uzyskać dostęp do zasobów za każdym razem. W przypadku semafora binarnego, istnieje ryzyko, że dwa lub więcej
+          wątków uzyska przypadkowo dostęp do zasobów w wyniku dania dostępu do semafora zanim poprzedni wątek nie skończył swojej pracy,
+          co może prowadzić do nieoczekiwanych i trudnych do zdiagnozowania błędów. Muteks gwarantuje tylko jednoczesny dostęp do zasobów przez jeden wątek.
+    \item Wydajność - Muteks jest zazwyczaj bardziej wydajny niż semafor binarny, ponieważ wymaga mniej operacji procesora.
+          W przypadku semafora binarnego, każdy wątek może zwiększyć lub zmniejszyć wartość licznika semafora, co wymaga dodatkowych operacji procesora.
+          W przypadku muteksu tylko jeden wątek blokuje muteks i uzyskuje dostęp do zasobów, co oznacza, że nie ma potrzeby zwiększania lub
+          zmniejszania wartości licznika. W praktyce pozwala to na bardziej zoptymalizowaną implementację tej metody synchronizacji.
+\end{itemize}
+
+\lstinputlisting[language=C++,
+    caption=Przykład zastosowania muteksów w FreeRTOS,
+    label={lst:muteks}]{muteks.cpp}
+
+W powyższym kodzie utworzono muteks za pomocą funkcji xSemaphoreCreateMutex(). Następnie utworzono dwa wątki, każdy z których próbuje uzyskać
+dostęp do chronionego zasobu za pomocą funkcji xSemaphoreTake(). Po uzyskaniu dostępu do zasobu wątek wykonuje swoje operacje,
+a następnie zwalnia muteks za pomocą funkcji xSemaphoreGive(). Funkcja vTaskDelay() została użyta do symulowania pracy wątków.
+
+Powyższy kod przedstawia prosty przykład użycia muteksów w FreeRTOS. Muteksy są przydatnym narzędziem do synchronizacji dostępu do zasobów w systemach
+czasu rzeczywistego, ponieważ zapewniają bezpieczne i wydajne zarządzanie dostępem do zasobów przez różne wątki.
