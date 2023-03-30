@@ -9,7 +9,7 @@ void task_function(void *parameters)
     }
 }
 
-void main_function(void)
+void main(void)
 {
     TaskHandle_t task_handle = nullptr;
     size_t stack_size = 100;

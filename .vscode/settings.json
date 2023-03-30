@@ -3,15 +3,21 @@
         "kątu",
         "Konceptualnie",
         "Livelock",
+        "międzywątkowa",
         "międzywątkową",
         "międzywątkowej",
         "Muteks",
+        "muteksa",
         "muteksie",
+        "muteksów",
         "muteksu",
         "muteksy",
         "niedeterminizmu",
         "niewykonywania",
         "preemtion",
         "startowany"
-    ]
+    ],
+    "files.associations": {
+        "type_traits": "cpp"
+    }
 }

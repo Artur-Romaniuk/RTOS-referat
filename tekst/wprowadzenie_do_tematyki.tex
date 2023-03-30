@@ -1,4 +1,4 @@
-W celu dokładnego zrozumienia wszystkich szczegółów komunikacji międzywątkowej w \gls{rtos},
+W celu dokładnego zrozumienia wszystkich szczegółów komunikacji międzywątkowej w systemach operacyjnych czasu rzeczywistego,
 jak i problemów związanych z nimi, należy najpierw zaznajomić się z ogólnymi
 charakterystykami takich systemów.
 
@@ -13,11 +13,12 @@ determinizm i szybką odpowiedź na zdarzenia w czasie rzeczywistym.
 Są one stosowane w wielu dziedzinach, takich jak przemysł, medycyna, telekomunikacja, transport czy lotnictwo,
 gdzie czas reakcji systemu na zdarzenia jest kluczowy dla zapewnienia bezpieczeństwa i efektywności działań.
 
-W RTOS, czas jest podstawowym elementem funkcjonowania systemu. Systemy te muszą zagwarantować przetwarzanie zadań w ściśle określonych przedziałach czasowych,
+W RTOS, czas jest podstawowym elementem funkcjonowania systemu\cite{design_and_analysis_phillip_a_laplante}.
+Systemy te muszą zagwarantować przetwarzanie zadań w ściśle określonych przedziałach czasowych,
 zwanych czasami odpowiedzi (ang. response time), oraz przestrzeganie terminów odpowiedzi (ang. deadline).
 W zależności od dziedziny zastosowania, RTOS może wymagać różnej dokładności czasowej i charakteryzować się różną tolerancją na naruszenia terminów odpowiedzi.
 W systemach sterowania przemysłowego czas odpowiedzi wynosi zazwyczaj kilka milisekund, a w lotnictwie zaledwie kilkadziesiąt mikrosekund. Często też właśnie specyfika aktualnego urządzenia dyktuje konsekwencje związane z niedotrzymaniem terminów.
-Ze względu na stosunek do terminów odpowiedzi dzielimy \gls{rtos} na trzy kategorie:
+Ze względu na stosunek do terminów odpowiedzi dzielimy \gls{rtos} na trzy kategorie\cite{real-time_computing_Shin, design_and_analysis_phillip_a_laplante}:
 \begin{itemize}
       \item twarde - takie, dla których przekroczenie terminu odpowiedzi wiąże się z katastrofalnymi skutkami dla systemu
       \item sztywne - takie, dla których przekroczenie terminu odpowiedzi oznacza unieważnienie odpowiedzi, jednak bez katastrofalnych skutków dla systemu
@@ -39,7 +40,7 @@ Przykładem takiego systemu może być domowy termostat z elektronicznym wyświe
 zadowolenie użytkownika najprawdopodobniej spadnie, jednak nie będzie to miało żadnych poważnych konsekwencji dla systemu.
 
 \subsection{Budowa RTOS}
-RTOS składa się z trzech głównych elementów: jądra systemu, usług systemowych oraz aplikacji użytkownika.
+RTOS składa się z trzech głównych elementów: jądra systemu, usług systemowych oraz aplikacji użytkownika\cite{freertosbook}.
 Jądro systemu to główny komponent \gls{rtos}, który zapewnia podstawowe funkcjonalności, takie jak wątki, planowanie czy obsługa przerwań.
 Usługi systemowe to zestaw funkcji, które mogą być wywoływane przez aplikacje użytkownika i które zapewniają interfejs do kontroli działania systemu,
 t.j. zarządzanie wątkami, synchronizacja, czy obsługa systemu plików.
@@ -59,14 +60,11 @@ W związku z tym, planowanie w systemach czasu rzeczywistego wymaga ciągłej oc
 a także zapewnienia, że zadania będą wykonywane w odpowiednim czasie, aby uniknąć zagłodzenia lub przeciążenia systemu.
 
 Istnieje wiele algorytmów planowania, które zostały opracowane, aby rozwiązać ten problem, jednak wciąż istnieją ograniczenia,
-takie jak złożoność obliczeniowa i trudność w określeniu optymalnego przydziału zasobów. Istnieją również niedeterministyczne algorytmy planowania,
+takie jak złożoność obliczeniowa i trudność w określeniu optymalnego przydziału zasobów. Istnieją również niedeterministyczne algorytmy planowania\cite{wang2021heuristic},
 działające na heurystycznych metodach analizy kodu, jednak omówienie tych znacznie bardziej zaawansowanych metod wykracza poza zakres tej pracy.
 
 Najbardziej popularne algorytmy planowania to:
 \begin{itemize}
-      \item Rate Monotonic Scheduling (RMS) - jest to metoda planowania polegająca na przydziale priorytetów w oparciu o okres zadania,
-            gdzie zadania z krótszymi okresami otrzymują wyższe priorytety. Ta metoda jest prosta i efektywna, ale może prowadzić do zagłodzenia
-            zadań o dłuższych okresach.
       \item Round Robin (RR) - W metodzie RR, każde zadanie otrzymuje określony kwant czasu (np. 10ms) na przetwarzanie,
             a po upływie tego czasu procesor jest przekazywany do kolejnego zadania, niezależnie od tego, czy bieżące zadanie zostało zakończone.
       \item Earliest Deadline First Scheduling (EDF) - jest to metoda planowania, która przydziela zadaniom priorytety w oparciu o ich terminy wykonywania.
@@ -84,7 +82,7 @@ systemów wbudowanych, ponieważ klasyczna metoda obsługi przerwań oraz zdarze
 
 \subsection{Zalety stosowania RTOS}
 Podstawową zaletą \gls{rtos} jest to, że umożliwiają programistom łatwe tworzenie aplikacji, które są podzielone na wątki,
-bez stosowania tradycyjnych systemów operacyjnych i związanego z nimi niedeterminizmu.
+bez stosowania tradycyjnych systemów operacyjnych i związanego z nimi niedeterminizmu\cite{wang2018review}.
 Jako że stosowanie zwykłych systemów operacyjnych jest niedopuszczalne w rozwiązaniach o wysokich wymaganiach niezawodności,
 jedyną alternatywą do \gls{rtos} jest architektura \gls{super loop}, która obarcza programistę całą logiką podziału zadań.
 Nic więc dziwnego, że \gls{rtos} są jednym z najbardziej popularnych oprogramowań stosowanych w systemach krytycznych,
@@ -94,10 +92,10 @@ gdzie gwarancje dot. niezawodności, determinizmu i czasu reakcji są wysoko cen
 Programowanie wielowątkowe jest obecnie jednym z najczęściej stosowanych podejść do równoległego programowania
 w systemach operacyjnych i aplikacjach. Jednak, z uwagi na złożoność problemu, programowanie wielowątkowe może prowadzić do wielu trudności,
 które mogą wpłynąć na wydajność aplikacji. W tym rozdziale zostaną przedstawione podstawowe koncepcje programowania wielowątkowego,
-a także omówione najczęstsze trudności i wyzwania, które mogą wystąpić podczas implementacji tego rodzaju aplikacji.
+a także najczęstsze trudności i wyzwania, które mogą wystąpić podczas implementacji tego rodzaju aplikacji.
 
 \subsection{Cechy programowania wielowątkowego}
-Programowanie wielowątkowe jest techniką programowania, która polega na równoległym wykonywaniu wielu wątków w obrębie jednego procesu.
+Programowanie wielowątkowe jest techniką programowania, która polega na równoległym wykonywaniu wielu wątków w obrębie jednego procesu\cite{butenhof2013programming}.
 Wątki to niezależne sekwencje instrukcji, które wykonują określone zadania w ramach spójnej przestrzeni pamięciowej.
 Wątki mogą działać równocześnie, co umożliwia wykorzystanie wielu rdzeni procesora oraz zwiększenie wydajności aplikacji,
 jednak mogą również służyć wyłącznie do rozdzielenia wykonywanego kodu pod kątem logicznym w celu podziału złożonego zadania na prostsze
@@ -125,27 +123,27 @@ z elementów synchronizacji oraz posiadanie ściśle ustalonych wymagań wobec p
 Dodatkowo aby stosunek narzutu administracji systemem do właściwej logiki programu był odpowiedni, ilość wątków nie może być nadmiarowa.
 W zależności od rodzaju wydzielenia wątków: jednorodne, o zbliżonej złożoności i wymogach obliczeniowych, lub niejednorodne, o różnej złożoności,
 system może działać najlepiej w różnych konfiguracjach. Dlatego krytycznym aspektem wytwarzania wydajnego oprogramowania jest testowanie oraz
-\gls{benchmarking}, które to metody pozwalają na empiryczne znalezienie optymalnych rozwiązań.
+\gls{benchmarking}. Stosowanie tych metod pozwala na empiryczne znalezienie optymalnych rozwiązań.
 
 \section{Wątki w systemie FreeRTOS}
 Podstawowym elementem systemu \gls{rtos} jest wątek (w nomenklaturze angielskiej nazywany Thread lub Task).
 Wątek cechuje się tym, że jest niezależny od pozostałych części programu oraz wykonuje się we własnym kontekście,
-z własnym fragmentem stosu.
+z własnym fragmentem stosu\cite{freertosbook}.
 Wątek nie posiada też żadnych zależności wobec innych zadań oraz jądra systemu. Oznacza to, że wątek może być dowolnie
 zatrzymywany oraz startowany, w zależności od decyzji planisty.
-Wątek może znajdować się w jednym z następujących stanów:
+Wątek może znajdować się w jednym z następujących stanów\cite{freertosdocs}:
 \begin{itemize}
-      \item Aktywny(ang. Running) - wątek jest aktualnie wykonywany oraz ma dostęp do zasobów procesora.
-      \item Gotowy(ang. Ready) - wątek jest na liście oczekujących do wykonania, ponieważ wątek o równym lub wyższym
+      \item Aktywny (ang. Running) - wątek jest aktualnie wykonywany oraz ma dostęp do zasobów procesora.
+      \item Gotowy (ang. Ready) - wątek jest na liście oczekujących do wykonania, ponieważ wątek o równym lub wyższym
             priorytecie jest aktualnie wykonywany.
-      \item Blokowany(ang. Blocked) - wątek oczekuje na zdarzenie czasowe lub zewnętrzne, do którego to momentu wystąpienia
+      \item Blokowany (ang. Blocked) - wątek oczekuje na zdarzenie czasowe lub zewnętrzne, do którego to momentu wystąpienia
             wątek nie może zostać przeniesiony do stanu aktywnego.
-      \item Zawieszony(ang. Suspended) - wątek który celowo został przeniesiony do stanu zawieszenia nie może zostać przeniesiony
+      \item Zawieszony (ang. Suspended) - wątek który celowo został przeniesiony do stanu zawieszenia nie może zostać przeniesiony
             do stanu aktywnego, do momentu celowego odwieszenia wątku za pomocą wywołania odpowiedniej metody.
 \end{itemize}
 
 System FreeRTOS jest systemem priorytetowym, co oznacza, że aktualnie aktywny wątek zawsze ma najwyższy lub równy priorytet
-w odniesieniu do pozostałych wątków w gotowości. Dodatkowo system może zostać skonfigurowany
+w odniesieniu do pozostałych wątków w gotowości\cite{freertosbook}. Dodatkowo system może zostać skonfigurowany
 aby korzystać z wywłaszczania (ang. preemtion), t.j. zmiana kontekstu może nastąpić bez celowego zatrzymania aktualnie
 wykonywanego wątku, a w wyniku zmiany priorytetów lub odblokowania wątku o wyższym priorytecie. \Gls{planista} stosuje algorytm
 Round Robin dla zadań o równym priorytecie w celu sprawiedliwego podziału zasobów pomiędzy wątkami o równej sobie ważności.

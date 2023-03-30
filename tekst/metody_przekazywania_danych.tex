@@ -1,0 +1,111 @@
+\section{Metody przekazywania danych}
+W poprzednim rozdziale zostały przedstawione metody synchronizacji, które mogą służyć do kontrolowania kolejności wykonywania zasad
+jak i blokowania dostępów do zasobów systemowych. W tym rozdziale zostaną przedstawione metody przekazywania danych, które pozwalają
+na bezpośrednie przekazywanie danych pomiędzy procesami, bez potrzeby ochrony dostępu do zasobów systemowych.
+
+\subsection{Kolejka komunikatów}
+Kolejka w systemach operacyjnych czasu rzeczywistego jest mechanizmem synchronizacji, który umożliwia przekazywanie danych między wątkami
+lub innymi jednostkami wykonawczymi w określonej kolejności\cite{freertosbook}. Kolejka zapewnia bezpieczne i potencjalnie nieblokujące przekazywanie danych między wątkami,
+a także zabezpiecza przed ryzykiem naruszenia spójności danych.
+
+Kolejka składa się z bufora, który przechowuje dane przekazywane między wątkami, oraz z semafora lub mutexu, który kontroluje dostęp do kolejki.
+W przypadku systemu FreeRTOS kolejka jest implementowana jako bufor typu pierścieniowego (ang. ring buffer), co oznacza, że nowe dane są dodawane
+na końcu bufora, a starsze dane są usuwane z początku bufora.
+
+Do operacji na kolejce w systemach \gls{rtos} służą dwie podstawowe funkcje:
+\begin{itemize}
+    \item Wyślij (ang. send) - dodaje nowy element do końca kolejki.
+    \item Odbierz (ang. receive) - pobiera element z początku kolejki.
+\end{itemize}
+Obie te operacje synchronizacyjne oferują różne tryby blokowania, w tym blokowanie na czas nieokreślony (ang. blocking indefinitely) lub
+blokowanie przez określony czas (ang. blocking for a specified time). Można też skorzystać z trybu nieblokującego (ang. non-blocking),
+który pozwala na natychmiastowy powrót z funkcji, jeśli kolejka jest pełna lub pusta.
+
+Kolejka jest bardzo popularnym mechanizmem przekazywania danych między wątkami w \gls{rtos} ze względu na swoją prostotę,
+szybkość i niezawodność. Kolejka może być wykorzystywana do przekazywania danych, takich jak sygnały, komunikaty, dane pomiarowe itp.
+
+Kolejka oferuje wiele zalet, w tym:
+\begin{itemize}
+    \item bezpieczne i nieblokujące przekazywanie danych między wątkami
+    \item chroni przed ryzykiem naruszenia spójności danych
+    \item może być wykorzystywana do przekazywania różnych typów danych
+    \item kolejka działa szybko i wydajnie.
+\end{itemize}
+Wady kolejkowania mogą obejmować:
+\begin{itemize}
+    \item ograniczenia pojemności kolejki, co może prowadzić do blokowania wątków, gdy kolejka jest pełna
+    \item wymagana jest alokacja pamięci na bufor kolejki, co może wpłynąć na wydajność systemu.\cite{butenhof2013programming}
+\end{itemize}
+
+Oto przykładowe użycie kolejki w systemie FreeRTOS:
+\lstinputlisting[language=C++,
+    caption=Przykład zastosowania kolejki w FreeRTOS,
+    label={lst:kolejka}]{kolejka.cpp}
+
+W tym przykładzie wątek nadawcy (producerTask) generuje kolejne liczby i dodaje je do kolejki, a wątek odbiorcy (consumerTask) pobiera te liczby
+z kolejki i wyświetla je na konsoli. Wątek nadawcy wysyła liczby do kolejki co 1 sekundę, a wątek odbiorcy odbiera liczby z kolejki w sposób blokujący.
+W tym kodzie funkcja xQueueCreate tworzy nową kolejkę o pojemności QUEUE\_SIZE i rozmiarze pojedynczego elementu równym ITEM\_SIZE.
+W funkcji app\_main tworzone są dwa wątki: producerTask i consumerTask, które korzystają z kolejki do przekazywania danych między sobą.
+W wątku producerTask funkcja xQueueSend służy do dodawania wartości do kolejki, a w wątku consumerTask funkcja xQueueReceive służy
+do pobierania wartości z kolejki.
+
+\subsection{Bufor wiadomości}
+Mechanizm bufora wiadomości jest podobny do kolejki, ale zasadniczo różni się sposobem przesyłania danych między zadaniami.
+W przypadku kolejki, wątek producenta umieszcza dane w kolejce, a wątek konsumenta odczytuje je z kolejki. Natomiast w przypadku bufora wiadomości,
+wątek producenta umieszcza pojedyncze wiadomości w buforze, a wątek konsumenta pobiera pojedyncze wiadomości z bufora.
+Kolejka jest zazwyczaj stosowana do przechowywania struktur danych, które są zazwyczaj większe niż pojedyncze wiadomości,
+podczas gdy bufor wiadomości jest bardziej odpowiedni do przesyłania małych porcji danych\cite{freertosbook}.
+
+Bufor wiadomości składa się z tablicy wiadomości o ustalonym rozmiarze i indeksów, które śledzą miejsce w buforze,
+w którym nowa wiadomość może być umieszczona lub stara wiadomość pobrana. Mechanizm bufora wiadomości zapewnia również
+ochronę przed nadmiernym zapełnieniem bufora oraz zabezpiecza bufor przed naruszeniem spójności danych w przypadku dostępu wielu wątków.
+
+Bufory wiadomości są często wykorzystywane w systemach czasu rzeczywistego, w których wiele zadań musi przesyłać
+krótkie komunikaty między sobą. Przykładowo, system monitoringu wykorzystujący wiele czujników może zbierać dane
+z każdego czujnika i umieszczać je w buforze wiadomości, z którego moduł przetwarzania danych odczytuje dane.
+
+Konkretnie w systemie FreeRTOS bufor wiadomości nie posiada ochrony przed jednoczesnym dostępem przez wiele procesów. Oznacza to, że w jest
+to w gestii użytkownika, aby zabezpieczyć bufor przed naruszeniem spójności danych, np. poprzez zastosowanie semafora lub wejście do krytycznej sekcji
+programu. Jest to świadoma decyzja twórców systemu w celu zapewnienia maksymalnej wydajności i minimalnego zużycia pamięci, ponieważ
+bufory wiadomości są najczęściej wykorzystywane w architekturze jednego producenta i jednego odbiorcy, a taka architektura nie wymaga dodatkowej
+synchronizacji.
+
+Oto przykładowy kod w C++, który przedstawia zastosowanie bufora wiadomości w FreeRTOS:
+\lstinputlisting[language=C++,
+    caption=Przykład zastosowania bufora wiadomości w FreeRTOS,
+    label={lst:bufor_wiadomosci}]{bufor_wiadomosci.cpp}
+Powyższy przykład jest modyfikacją przykładu zastosowania kolejki z poprzedniego podrozdziału.
+Tym jest tworzony bufor wiadomości o rozmiarze 100, a następnie uruchamiane są dwa wątki: vProducerTask i vConsumerTask.
+Wątek producenta generuje liczby całkowite i umieszcza je w buforze wiadomości z opóźnieniem jednej sekundy między kolejnymi wiadomościami.
+Wątek konsumenta odbiera liczby całkowite z bufora i wyświetla je w konsoli. Obliczanie wartości ''sizeof(int)'' w każdej z funkcji xMessageBufferSend
+i xMessageBufferReceive jest konieczne, aby zapewnić, że rozmiar przesyłanej wiadomości jest zgodny z rozmiarem bufora wiadomości.
+Jak widać, w przypadku bufora wiadomości istnieje większa szansa na błędne użycie, ponieważ nie posiada on stałego typu przekazywanej wiadomości.
+Jest to jedna z wad, którą trzeba zaakceptować w zamian za większą wydajność i mniejsze zużycie pamięci.
+
+\subsection{Bufor strumieniowy}
+Bufor strumieniowy to mechanizm synchronizacji, który pozwala na jednokierunkową transmisję danych o arbitralnym rozmiarze.
+Bufor strumieniowy jest zazwyczaj stosowany do przesyłania danych z jednego źródła do jednego odbiorcy. Bufor strumieniowy
+jest bardzo zbliżony do bufora wiadomości, ale różni się tym, że w buforze strumieniowym dane są przesyłane w sposób ciągły,
+a nie poprzez pojedyncze wiadomości. Jest to częsty wybór dla przesyłania ciągłego strumienia danych z asynchronicznego źródła,
+do zadania odpowiedzialnego za przetwarzanie danych.
+
+Oto przykład kodu w C++, w którym producentem danych jest zewnętrzne przerwanie,
+a konsumentem jest wątek z systemu FreeRTOS korzystający z bufora strumieniowego:
+\lstinputlisting[language=C++,
+    caption=Przykład zastosowania bufora strumieniowego w FreeRTOS,
+    label={lst:bufor_strumieniowy}]{bufor_strumieniowy.cpp}
+W tym przykładzie producentem danych jest zewnętrzne przerwanie, które generuje pewne dane i przekazuje je do bufora strumieniowego za pomocą
+funkcji xStreamBufferSendFromISR. Konsumpcją danych zajmuje się wątek consumerTask, który regularnie odczytuje dane z bufora strumieniowego
+za pomocą funkcji xStreamBufferReceive. Takie rozwiązanie cechuje się nawet o połowę większą wydajnością od wykorzystania kolejki lub muteksu,
+co czyni je idealnym wyborem do przekazywania dużych ilości danych z asynchronicznego źródła.
+
+\subsection{Podsumowanie}
+W rozdziale omówiliśmy trzy mechanizmy wymiany danych w systemach \gls{rtos}: kolejki, bufory wiadomości i bufory strumieniowe.
+Kolejka to podstawowy mechanizm synchronizacji i komunikacji, który umożliwia bezpieczne przesyłanie danych między wątkami.
+Bufor wiadomości i bufor strumieniowy są bardziej zaawansowanymi mechanizmami, które pozwalają na przesyłanie większych ilości danych
+oraz umożliwiają szybsze operacje, kosztem mniejszej swobody i bezpieczeństwa.
+
+Każdy z tych mechanizmów ma swoje zalety i wady, a ich wybór zależy od specyfiki aplikacji. Kolejka jest najprostszym i najbardziej uniwersalnym mechanizmem,
+który umożliwia przesyłanie danych o stałym rozmiarze w bezpieczny sposób. Bufor wiadomości jest bardziej zaawansowanym mechanizmem, który pozwala na
+przesyłanie danych o od jednego producenta do konsumenta w bardziej wydajny sposób. Bufor strumieniowy jest najbardziej elastycznym mechanizmem,
+który umożliwia przesyłanie danych bez ograniczeń rozmiaru co czyni go idealnym do obsługi ciągłej oraz jednokierunkowej transmisji danych.

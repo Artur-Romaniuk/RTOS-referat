@@ -695,9 +695,9 @@ literate      =        % Support additional characters
 \newcommand{\abstractpages}{
     \ifnum\strcmp{\locallang}{PL} = 0
         \stronastreszczenia
-        \abstractpage
+        % \abstractpage
     \else
-        \abstractpage
+        % \abstractpage
         \stronastreszczenia
     \fi
 }
